@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Client</title>
+</head>
+<body>
+    <img id="img1" src="">
+    <img id="img2" src="">
+    <script>
+        // get img dom element
+        const img1 = document.getElementById('img1');
+        
+        const WS_URL1 = "ws://localhost:8080";
+     
+        const ws1 = new WebSocket(WS_URL1);
+        ws1.onopen = () => console.log(`Connected to ${WS_URL1}`);
+        ws1.onmessage = message => 
+        {
+            if (!message.data.startsWith("msg:"))
+                // set the base64 string to the src tag of the image
+                img1.src = message.data;
+        }
+
+
+        // get img dom element
+        const img2 = document.getElementById('img2');
+        
+        const WS_URL2 = "ws://localhost:8080";
+     
+        const ws2 = new WebSocket(WS_URL2);
+        ws2.onopen = () => console.log(`Connected to ${WS_URL2}`);
+        ws2.onmessage = message => 
+        {
+            if (!message.data.startsWith("msg:"))
+                // set the base64 string to the src tag of the image
+                img2.src = message.data;
+        }
+    </script>
+    <br>
+
+    <input type="text" id="message" />
+    <button onclick="transmitMessage()">Send</button>
+    <script>
+        // Create a new WebSocket.
+        var socket  = new WebSocket(WS_URL2);
+
+        // Define the 
+        var message = document.getElementById('message');
+
+        function transmitMessage() 
+        {
+            var msg = "msg:" + message.value;
+            socket.send( msg );
+        }
+
+        socket.onmessage = function(e) 
+        {
+            if (e.data.startsWith("msg:"))
+                alert( e.data );
+        }
+    </script>
+</body>
+</html>
